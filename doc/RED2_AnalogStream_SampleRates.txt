@@ -1,0 +1,15 @@
+Approximate sample rates corresponding to values of Sample_DIV and PLL_DIV.
+(Values are probably about within +/-2%.)
+
+Sample_DIV	PLL_DIV		Rate (samples / sec)
+1		4		1524000.0
+2		4		1015600.0
+4		4		609600.0
+8		4		338660.0
+16		4		179200.0
+32		4		92300.0
+64		4		46840.0
+128		4		23620.0
+256		4		11860.0
+512		4		5932.0
+
