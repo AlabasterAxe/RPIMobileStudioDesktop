@@ -5,13 +5,11 @@ bin_PROGRAMS = test objtest
 librpims_la_CFLAGS = ${GL_CFLAGS}
 librpims_la_CPPFLAGS = ${GL_CPPFLAGS} -Wall -fPIC -I${srcdir} -I${srcdir}/RED2
 librpims_la_LDFLAGS = ${GL_LDFLAGS}
-librpims_la_SOURCES = IOBoard.c IOBoard_libusb.c AnalogStream.c FuncGen.c DigitalStream.c DigitalIO.c RED2/RED2.c RED2/RED2_AnalogStream.c RED2/RED2_FuncGen.c RED2/RED2_DigitalStream.c RED2/RED2_DigitalIO.c
-librpims_la_SOURCES += ObjTable.c
+librpims_la_SOURCES = IOBoard.c IOBoard_libusb.c AnalogStream.c FuncGen.c DigitalStream.c DigitalIO.c RED2/RED2.c RED2/RED2_AnalogStream.c RED2/RED2_FuncGen.c RED2/RED2_DigitalStream.c RED2/RED2_DigitalIO.c ObjTable.c
 
 librpims_a_CFLAGS = ${GL_CFLAGS}
 librpims_a_CPPFLAGS = ${GL_CPPFLAGS} -Wall -fPIC -I${srcdir} -I${srcdir}/RED2 
-librpims_a_SOURCES = IOBoard.c AnalogStream.c FuncGen.c DigitalStream.c DigitalIO.c RED2/RED2.c RED2/RED2_AnalogStream.c RED2/RED2_FuncGen.c RED2/RED2_DigitalStream.c RED2/RED2_DigitalIO.c
-librpims_a_SOURCES += ObjTable.c
+librpims_a_SOURCES = IOBoard.c IOBoard_libusb.c AnalogStream.c FuncGen.c DigitalStream.c DigitalIO.c RED2/RED2.c RED2/RED2_AnalogStream.c RED2/RED2_FuncGen.c RED2/RED2_DigitalStream.c RED2/RED2_DigitalIO.c ObjTable.c
 
 test_CFLAGS = ${GL_CFLAGS}
 test_CPPFLAGS = ${GL_CPPFLAGS} -Wall -I${srcdir} -I${srcdir}/RED2 
