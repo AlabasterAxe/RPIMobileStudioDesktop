@@ -1,5 +1,6 @@
 AC_INIT(librpims, 1.0.0, Brian Molnar <brian.molnar@gmail.com>)
 AC_CANONICAL_TARGET
+AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE([subdir-objects])
 
 # checks for programs
