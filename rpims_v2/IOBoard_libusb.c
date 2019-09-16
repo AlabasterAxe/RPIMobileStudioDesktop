@@ -4,6 +4,7 @@
 * Please see the included LICENSE file in the top level directory. *
 *******************************************************************/
 #include <usb.h>
+#include <stdio.h>
 
 #include "IOBoard.h"
 
@@ -147,7 +148,9 @@ IOBoard_Probe_libusb(int type)
 	for (bus = busses; bus; bus = bus->next) {
 		struct usb_device *dev;
 		for (dev = bus->devices; dev; dev = dev->next) {
+      printf("%x\n", dev->descriptor.idVendor);
 			if (dev->descriptor.idVendor == RPIMS_VENDOR_ID) {
+				printf("I am become death, the destroyer of worlds.");
 				if (type < 0) {
 					usb_dev = dev;
 					goto found;
@@ -160,12 +163,15 @@ IOBoard_Probe_libusb(int type)
 	}
 
  found:
-	if (!usb_dev)
+	if (!usb_dev) {
 		return NULL;
+	}
 
 	iob = (struct IOBoard *) malloc(sizeof(struct IOBoard));
-	if (!iob)
+
+	if (!iob) {
 		return NULL;
+	}
 
 	/* Set USB operations */
 	iob->usbops = &IOBoardUSBOps_libusb;

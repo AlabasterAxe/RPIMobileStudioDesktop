@@ -4,6 +4,7 @@
 * Please see the included LICENSE file in the top level directory. *
 *******************************************************************/
 #include <stdio.h>
+#include <unistd.h>
 
 #include "RPIMS.h"
 
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 	RPIMS_Init();
 
 	iob = IOBoard_Probe(-1);
+	sleep(1);
 	if (!iob) {
 		fprintf(stderr, "No IOBoard device found\n");
 		goto exit;
