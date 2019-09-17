@@ -3,44 +3,51 @@
 * This work is licensed under the FreeBSD License.                 *
 * Please see the included LICENSE file in the top level directory. *
 *******************************************************************/
+#include <libusb.h>
 #include <usb.h>
+
 #include <stdio.h>
 
 #include "IOBoard.h"
 
 struct IOBoardUSBPriv_libusb {
-	struct usb_device	*dev;
-	struct usb_dev_handle	*hnd;
+	struct libusb_device *dev;
+	struct libusb_device_descriptor *desc;
+	struct libusb_device_handle *hnd;
 };
 
 static int
-IOBoard_USBOps_Open_libusb(struct IOBoard *iob)
-{
+IOBoard_USBOps_Open_libusb(struct IOBoard *iob) {
+
 	struct IOBoardUSBPriv_libusb *priv;
-	struct usb_dev_handle *hnd;
+	struct libusb_device_handle *hnd;
 	int err;
 
 	priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
 
 	/* Reset USB device */
-	hnd = usb_open(priv->dev);
-	if (!hnd)
+	err = libusb_open(priv->dev, &hnd);
+	if (!err == 0) {
 		return -1;
+	}
 
-	err = usb_reset(hnd);
-	if (err < 0)
+	err = libusb_reset_device(hnd);
+	if (err < 0) {
 		return err;
+	}
 
-	err = usb_close(hnd);
-	if (err < 0)
+	libusb_close(hnd);
+	if (err < 0) {
 		return err;
+	}
 
 	/* Open handle */
-	hnd = usb_open(priv->dev);
-	if (!hnd)
+	err = libusb_open(priv->dev, &hnd);
+	if (!err == 0) {
 		return -1;
+	}
 
-	err = usb_claim_interface(hnd, 0);
+	err = libusb_claim_interface(hnd, 0);
 	if (err < 0)
 		return err;
 
@@ -51,18 +58,17 @@ IOBoard_USBOps_Open_libusb(struct IOBoard *iob)
 }
 
 static int
-IOBoard_USBOps_Close_libusb(struct IOBoard *iob)
-{
+IOBoard_USBOps_Close_libusb(struct IOBoard *iob) {
 	struct IOBoardUSBPriv_libusb *priv;
 	int err;
 
 	priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
 
-	err = usb_release_interface(priv->hnd, 0);
+	err = libusb_release_interface(priv->hnd, 0);
 	if (err < 0)
 		return err;
 
-	err = usb_close(priv->hnd);
+	libusb_close(priv->hnd);
 	if (err < 0)
 		return err;
 
@@ -71,53 +77,51 @@ IOBoard_USBOps_Close_libusb(struct IOBoard *iob)
 
 static int
 IOBoard_USBOps_ControlMsg_libusb(struct IOBoard *iob, int type, int req, int value,
-				 int index, char *data, int size, int timeout)
-{
-	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return usb_control_msg(priv->hnd, type, req, value,
-			       index, data, size, timeout);
+				 int index, char *data, int size, int timeout) {
+	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	// return usb_control_msg(priv->hnd, type, req, value,
+			    //    index, data, size, timeout);
+				return 0;
 }
 
 static int
-IOBoard_USBOps_BulkRead_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout)
-{
-	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return usb_bulk_read(priv->hnd, endpoint, data, len, timeout);
+IOBoard_USBOps_BulkRead_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
+	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	// return usb_bulk_read(priv->hnd, endpoint, data, len, timeout);
+	return 0;
 }
 
 static int
-IOBoard_USBOps_BulkWrite_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout)
-{
-	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return usb_bulk_write(priv->hnd, endpoint, data, len, timeout);
+IOBoard_USBOps_BulkWrite_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
+	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	// return usb_bulk_write(priv->hnd, endpoint, data, len, timeout);
+	return 0;
 }
 
 static int
-IOBoard_USBOps_InterruptRead_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout)
-{
-	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return usb_interrupt_read(priv->hnd, endpoint, data, len, timeout);
+IOBoard_USBOps_InterruptRead_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
+	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	// return usb_interrupt_read(priv->hnd, endpoint, data, len, timeout);
+	return 0;
 }
 
 static int
-IOBoard_USBOps_InterruptWrite_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout)
-{
-	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return usb_interrupt_write(priv->hnd, endpoint, data, len, timeout);
+IOBoard_USBOps_InterruptWrite_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
+	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	// return usb_interrupt_write(priv->hnd, endpoint, data, len, timeout);
+	return 0;
 }
 
 static int
-IOBoard_USBOps_Reset_libusb(struct IOBoard *iob)
-{
+IOBoard_USBOps_Reset_libusb(struct IOBoard *iob) {
 	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return usb_reset(priv->hnd);
+	return libusb_reset_device(priv->hnd);
 }
 
 static int
-IOBoard_USBOps_GetProductId_libusb(struct IOBoard *iob)
-{
+IOBoard_USBOps_GetProductId_libusb(struct IOBoard *iob) {
 	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return priv->dev->descriptor.idProduct;
+	return priv->desc->idProduct;
 }
 
 static struct IOBoardUSBOps IOBoardUSBOps_libusb = {
@@ -132,46 +136,45 @@ static struct IOBoardUSBOps IOBoardUSBOps_libusb = {
 	.GetProductId = IOBoard_USBOps_GetProductId_libusb,
 };
 
-struct IOBoard *
-IOBoard_Probe_libusb(int type)
-{
-	struct usb_bus *busses;
-	struct usb_bus *bus;
-	struct usb_device *usb_dev = NULL;
+struct IOBoard * IOBoard_Probe_libusb(int type) {
+	struct libusb_device **libusb_devs = NULL;
+	struct libusb_device *libusb_dev = NULL;
+	struct libusb_device_descriptor *libusb_desc = NULL;
 	struct IOBoard *iob = NULL;
 
-	usb_find_busses();
-	usb_find_devices();
+	libusb_get_device_list(NULL, &libusb_devs);
 
-	busses = usb_get_busses();
+	for (size_t idx = 0; libusb_devs[idx] != NULL; idx++) {
+		struct libusb_device *dev = libusb_devs[idx];
+		struct libusb_device_descriptor desc = {0};
 
-	for (bus = busses; bus; bus = bus->next) {
-		struct usb_device *dev;
-		for (dev = bus->devices; dev; dev = dev->next) {
-      printf("%x\n", dev->descriptor.idVendor);
-			if (dev->descriptor.idVendor == RPIMS_VENDOR_ID) {
-				printf("I am become death, the destroyer of worlds.");
-				if (type < 0) {
-					usb_dev = dev;
-					goto found;
-				} else if (dev->descriptor.idProduct == type) {
-					usb_dev = dev;
-					goto found;
-				}
+		libusb_get_device_descriptor(libusb_dev, &desc);
+		printf("%x\n", desc.idVendor);
+		if (desc.idVendor == RPIMS_VENDOR_ID) {
+			if (type < 0) {
+				libusb_dev = dev;
+				libusb_desc = &desc;
+				goto found;
+			} else if (desc.idProduct == type) {
+				libusb_dev = dev;
+				libusb_desc = &desc;
+				goto found;
 			}
 		}
 	}
 
  found:
-	if (!usb_dev) {
+	if (!libusb_dev) {
 		return NULL;
 	}
 
+	printf("Got a device!\n");
 	iob = (struct IOBoard *) malloc(sizeof(struct IOBoard));
 
 	if (!iob) {
 		return NULL;
 	}
+	printf("Got a struct!\n");
 
 	/* Set USB operations */
 	iob->usbops = &IOBoardUSBOps_libusb;
@@ -180,7 +183,13 @@ IOBoard_Probe_libusb(int type)
 		free(iob);
 		return NULL;
 	}
-	((struct IOBoardUSBPriv_libusb*) iob->usbpriv)->dev = usb_dev;
+	printf("Got a usbpriv!!\n");
+	((struct IOBoardUSBPriv_libusb*) iob->usbpriv)->dev = libusb_dev;
+	((struct IOBoardUSBPriv_libusb*) iob->usbpriv)->desc = libusb_desc;
+
+	if (!iob) {
+		printf("something's rotten in the state of denmark");
+	}
 
 	return iob;
 }

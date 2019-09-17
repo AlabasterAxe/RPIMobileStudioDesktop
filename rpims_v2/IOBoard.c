@@ -3,12 +3,10 @@
 * This work is licensed under the FreeBSD License.                 *
 * Please see the included LICENSE file in the top level directory. *
 *******************************************************************/
-#include <usb.h>
+#include <libusb.h>
+#include <stdio.h>
 
 #include "IOBoard.h"
-
-
-
 
 extern struct IOBoardOps RED2_IOBoardOps;
 
@@ -17,43 +15,47 @@ extern struct IOBoard *IOBoard_Probe_libusb(int type);
 int
 RPIMS_Init(void)
 {
-	usb_init();
+	libusb_init(NULL);
 	return 0;
 }
 
 
 struct IOBoard *
-IOBoard_Probe(int type)
-{
+IOBoard_Probe(int type) {
 	struct IOBoard *iob;
 	int product_id;
 	int err;
 
 	/* Default to using libusb interface. This could change in the future */
 	iob = IOBoard_Probe_libusb(type);
-	if (!iob)
+	if (!iob) {
 		return NULL;
+	}
 
 	/* XXX-TODO: Use lookup table for ProductID and IOBoardOps */
 	product_id = IOBoard_USBGetProductId(iob);
-	if (product_id == 0x1000)
+	printf("Product id: %x\n", product_id);
+	if (product_id == 0x1000) {
 		//iob->ops = &ARM_IOBoardOps;
 		iob->ops = NULL;
-	else if (product_id == 0x2100)
+	} else if (product_id == 0x2100) {
 		iob->ops = &RED2_IOBoardOps;
-	else
+	} else {
 		iob->ops = NULL;
+	}
 
 	/* Call IOBoard init function, if it has one */
 	if (iob->ops && iob->ops->Init) {
 		err = iob->ops->Init(iob);
 		if (err) {
+			fprintf(stderr, "There was an error initing the device.\n");
 			free(iob);
 			return NULL;
 		}
 
 		err = iob->ops->Open(iob);
 		if (err) {
+			fprintf(stderr, "There was an error opening the device: %d \n");
 			free(iob);
 			return NULL;
 		}

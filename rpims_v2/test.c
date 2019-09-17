@@ -22,61 +22,63 @@ int main(int argc, char *argv[])
 	RPIMS_Init();
 
 	iob = IOBoard_Probe(-1);
-	sleep(1);
 	if (!iob) {
 		fprintf(stderr, "No IOBoard device found\n");
 		goto exit;
-	}
-
-	as = AnalogStream_New(iob);
-	if (!as) {
-		fprintf(stderr, "Failde to create AnalogStream object\n");
-		goto exit;
-	}
-
-	samplesize = 4096;
-	channels = 1;
-
-	err = AnalogStream_Start(as);
-	if (err < 0) {
-		fprintf(stderr, "Failed to start analog stream\n");
-		goto exit;
+	} else {
+		printf("IOBoard device found!\n");
 	}
 
 
+	// as = AnalogStream_New(iob);
+	// if (!as) {
+	// 	fprintf(stderr, "Failed to create AnalogStream object\n");
+	// 	goto exit;
+	// }
 
-	err = AnalogStream_GetSamples(as, samples, samplesize, channels);
-	if (err < 0) {
-		fprintf(stderr, "Failed to get samples\n");
-		goto exit;
-	}
+	// samplesize = 4096;
+	// channels = 1;
 
-	for (idx = 0; idx < 16; idx++) {
-		fprintf(stdout, "%04x ", samples[idx]);
-	}
-	fprintf(stdout, "\n");
-
-
-
-	err = AnalogStream_GetData(as, data, samplesize, channels);
-	if (err < 0) {
-		fprintf(stderr, "Failed to get data\n");
-		goto exit;
-	}
-
-	for (idx = 0; idx < 16; idx++) {
-		fprintf(stdout, "%.4f ", data[idx]);
-	}
-	fprintf(stdout, "\n");
+	// err = AnalogStream_Start(as);
+	// if (err < 0) {
+	// 	fprintf(stderr, "Failed to start analog stream\n");
+	// 	goto exit;
+	// }
 
 
-	err = AnalogStream_Stop(as);
-	if (err < 0) {
-		fprintf(stderr, "Failed to stop analog stream\n");
-		goto exit;
-	}
 
-	AnalogStream_Destroy(as);
+	// err = AnalogStream_GetSamples(as, samples, samplesize, channels);
+	// if (err < 0) {
+	// 	fprintf(stderr, "Failed to get samples\n");
+	// 	goto exit;
+	// }
+
+	// for (idx = 0; idx < 16; idx++) {
+	// 	fprintf(stdout, "%04x ", samples[idx]);
+	// }
+	// fprintf(stdout, "\n");
+
+
+
+	// err = AnalogStream_GetData(as, data, samplesize, channels);
+	// if (err < 0) {
+	// 	fprintf(stderr, "Failed to get data\n");
+	// 	goto exit;
+	// }
+
+	// for (idx = 0; idx < 16; idx++) {
+	// 	fprintf(stdout, "%.4f ", data[idx]);
+	// }
+	// fprintf(stdout, "\n");
+
+
+	// err = AnalogStream_Stop(as);
+	// if (err < 0) {
+	// 	fprintf(stderr, "Failed to stop analog stream\n");
+	// 	goto exit;
+	// }
+
+	// AnalogStream_Destroy(as);
 	IOBoard_Close(iob);
 
  exit:
