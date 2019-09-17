@@ -12,7 +12,6 @@
 
 struct IOBoardUSBPriv_libusb {
 	struct libusb_device *dev;
-	struct libusb_device_descriptor *desc;
 	struct libusb_device_handle *hnd;
 };
 
@@ -48,8 +47,9 @@ IOBoard_USBOps_Open_libusb(struct IOBoard *iob) {
 	}
 
 	err = libusb_claim_interface(hnd, 0);
-	if (err < 0)
+	if (err < 0) {
 		return err;
+	}
 
 	//usb_set_altinterface(hnd, 1);
 
@@ -121,7 +121,10 @@ IOBoard_USBOps_Reset_libusb(struct IOBoard *iob) {
 static int
 IOBoard_USBOps_GetProductId_libusb(struct IOBoard *iob) {
 	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	return priv->desc->idProduct;
+    struct libusb_device_descriptor desc = {0};
+	// todo check return code
+	libusb_get_device_descriptor(priv->dev, &desc);
+    return desc.idProduct;
 }
 
 static struct IOBoardUSBOps IOBoardUSBOps_libusb = {
@@ -139,29 +142,27 @@ static struct IOBoardUSBOps IOBoardUSBOps_libusb = {
 struct IOBoard * IOBoard_Probe_libusb(int type) {
 	struct libusb_device **libusb_devs = NULL;
 	struct libusb_device *libusb_dev = NULL;
-	struct libusb_device_descriptor *libusb_desc = NULL;
 	struct IOBoard *iob = NULL;
 
-	libusb_get_device_list(NULL, &libusb_devs);
+	ssize_t count = libusb_get_device_list(NULL, &libusb_devs);
 
 	for (size_t idx = 0; libusb_devs[idx] != NULL; idx++) {
 		struct libusb_device *dev = libusb_devs[idx];
-		struct libusb_device_descriptor desc = {0};
+		struct libusb_device_descriptor desc;
 
 		libusb_get_device_descriptor(libusb_dev, &desc);
 		printf("%x\n", desc.idVendor);
 		if (desc.idVendor == RPIMS_VENDOR_ID) {
 			if (type < 0) {
 				libusb_dev = dev;
-				libusb_desc = &desc;
 				goto found;
 			} else if (desc.idProduct == type) {
 				libusb_dev = dev;
-				libusb_desc = &desc;
 				goto found;
 			}
 		}
 	}
+
 
  found:
 	if (!libusb_dev) {
@@ -185,11 +186,11 @@ struct IOBoard * IOBoard_Probe_libusb(int type) {
 	}
 	printf("Got a usbpriv!!\n");
 	((struct IOBoardUSBPriv_libusb*) iob->usbpriv)->dev = libusb_dev;
-	((struct IOBoardUSBPriv_libusb*) iob->usbpriv)->desc = libusb_desc;
 
 	if (!iob) {
 		printf("something's rotten in the state of denmark");
 	}
 
+	libusb_free_device_list(libusb_devs, count);
 	return iob;
 }

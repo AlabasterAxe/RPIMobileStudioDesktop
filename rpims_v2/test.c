@@ -23,10 +23,10 @@ int main(int argc, char *argv[])
 
 	iob = IOBoard_Probe(-1);
 	if (!iob) {
-		fprintf(stderr, "No IOBoard device found\n");
+		fprintf(stderr, "No IOBoard   device found\n");
 		goto exit;
 	} else {
-		printf("IOBoard device found!\n");
+		printf("IOBoard  device found!\n");
 	}
 
 
