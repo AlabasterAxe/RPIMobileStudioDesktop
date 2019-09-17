@@ -27,6 +27,7 @@ IOBoard_USBOps_Open_libusb(struct IOBoard *iob) {
 	/* Reset USB device */
 	err = libusb_open(priv->dev, &hnd);
 	if (!err == 0) {
+		fprintf(stderr, "The error is: %s\n", libusb_error_name(err));
 		return -1;
 	}
 
@@ -145,7 +146,7 @@ struct IOBoard * IOBoard_Probe_libusb(int type) {
 	struct IOBoard *iob = NULL;
 
 	// Todo: replace this with convenience function which returns device by vendor id and product id
-        ssize_t count = libusb_get_device_list(NULL, &libusb_devs);
+    ssize_t count = libusb_get_device_list(NULL, &libusb_devs);
 
 	for (size_t idx = 0; libusb_devs[idx] != NULL; idx++) {
 		struct libusb_device *dev = libusb_devs[idx];
