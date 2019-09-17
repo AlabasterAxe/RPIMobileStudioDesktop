@@ -150,7 +150,7 @@ struct IOBoard * IOBoard_Probe_libusb(int type) {
 		struct libusb_device *dev = libusb_devs[idx];
 		struct libusb_device_descriptor desc;
 
-		libusb_get_device_descriptor(libusb_dev, &desc);
+		libusb_get_device_descriptor(dev, &desc);
 		printf("%x\n", desc.idVendor);
 		if (desc.idVendor == RPIMS_VENDOR_ID) {
 			if (type < 0) {

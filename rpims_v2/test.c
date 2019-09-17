@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
 		printf("IOBoard  device found!\n");
 	}
 
-
 	// as = AnalogStream_New(iob);
 	// if (!as) {
 	// 	fprintf(stderr, "Failed to create AnalogStream object\n");
