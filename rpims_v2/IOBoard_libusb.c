@@ -144,7 +144,8 @@ struct IOBoard * IOBoard_Probe_libusb(int type) {
 	struct libusb_device *libusb_dev = NULL;
 	struct IOBoard *iob = NULL;
 
-	ssize_t count = libusb_get_device_list(NULL, &libusb_devs);
+	// Todo: replace this with convenience function which returns device by vendor id and product id
+        ssize_t count = libusb_get_device_list(NULL, &libusb_devs);
 
 	for (size_t idx = 0; libusb_devs[idx] != NULL; idx++) {
 		struct libusb_device *dev = libusb_devs[idx];
