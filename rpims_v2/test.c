@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
 	err = AnalogStream_GetSamples(as, samples, samplesize, channels);
 	if (err < 0) {
-		fprintf(stderr, "Failed to get samples\n");
+		fprintf(stderr, "Failed to get  samples\n");
 		goto exit;
 	}
 

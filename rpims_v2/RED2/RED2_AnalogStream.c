@@ -466,13 +466,13 @@ RED2_AnalogStream_GetSamples(struct AnalogStreamDev *impl,
 
 
 	rc = IOBoard_USBBulkWrite(dev, 0x02, (char *) tx_buf, 8, 1);
-	fprintf(stdout, "Write: %d\n", rc);
+	// fprintf(stdout, "Write: %d\n", rc);
 
 	idx = 0;
 	while (bytes_read < size) {
 
 		rc = IOBoard_USBBulkRead(dev, 0x01, (char *) rx_buf, 512, 60000);
-		fprintf(stdout, "Read: %d\n", rc);
+		// fprintf(stdout, "Read: %d\n", rc);
 
 		if (rc == 0)
 			continue;
