@@ -23,14 +23,14 @@ revision of the I/O board.
 Required libraries: libtool, automake
 
 From the lib/libusb-0.1.12 directory:
-	./configure
-	make
-	make install
+  ./configure
+  make
+  make install
 
 From the rpims_v2 directory:
-	./bootstrap.sh
-	./configure
-	make
+  ./bootstrap.sh
+  ./configure
+  make
 
 To run the test case:
 ./test must be run with root permissions

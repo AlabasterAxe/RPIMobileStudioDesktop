@@ -17,22 +17,22 @@ AS=gcc -fPIC -c
 .SUFFIXES: .lsb .lsb~ $(SUFFIXES)
 
 # Default rule to create an lsb from a C source file
-.c.lsb:	; make $*.o
-	$(LD) $(LDFLAGS) -o $*.tmp \
-		$(CINDIR)/cin.o $(XLDFLAGS) $*.o $(CINLIB)
-	$(CINDIR)/lvsbutil -c $* -t CIN -d "`pwd`"
-	@rm -f $*.tmp
+.c.lsb:  ; make $*.o
+  $(LD) $(LDFLAGS) -o $*.tmp \
+    $(CINDIR)/cin.o $(XLDFLAGS) $*.o $(CINLIB)
+  $(CINDIR)/lvsbutil -c $* -t CIN -d "`pwd`"
+  @rm -f $*.tmp
 
 
-open_board.lsb:	open_board.o
-	$(LD) $(LDFLAGS) -o open_board.tmp \
-		$(CINDIR)/cin.o $(XLDFLAGS) open_board.o  $(CINLIB)
-	$(CINDIR)/lvsbutil -c open_board -t CIN -d "`pwd`"
-	@rm -f open_board.tmp
+open_board.lsb:  open_board.o
+  $(LD) $(LDFLAGS) -o open_board.tmp \
+    $(CINDIR)/cin.o $(XLDFLAGS) open_board.o  $(CINLIB)
+  $(CINDIR)/lvsbutil -c open_board -t CIN -d "`pwd`"
+  @rm -f open_board.tmp
 
 clean:
-	$(RM) -f open_board.o open_board.tmp
+  $(RM) -f open_board.o open_board.tmp
 
 spotless: clean
-	$(RM) -f open_board.lsb
+  $(RM) -f open_board.lsb
 

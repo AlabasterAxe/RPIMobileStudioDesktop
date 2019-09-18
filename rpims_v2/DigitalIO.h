@@ -22,23 +22,23 @@
 struct DigitalIODev;
 
 struct DigitalIODevOps {
-	int (*Init)(struct DigitalIODev *impl);
-	int (*Cleanup)(struct DigitalIODev *impl);
-	int (*SetOpenedDevice)(struct DigitalIODev *impl, struct IOBoard *dev);
-	int (*GetDigitalDirections)(struct DigitalIODev *impl, unsigned int *dirs);
-	int (*SetDigitalDirections)(struct DigitalIODev *impl, unsigned int dirs);
-	int (*GetDigitalStates)(struct DigitalIODev *impl, unsigned int *states);
-	int (*SetDigitalStates)(struct DigitalIODev *impl, unsigned int states);
+  int (*Init)(struct DigitalIODev *impl);
+  int (*Cleanup)(struct DigitalIODev *impl);
+  int (*SetOpenedDevice)(struct DigitalIODev *impl, struct IOBoard *dev);
+  int (*GetDigitalDirections)(struct DigitalIODev *impl, unsigned int *dirs);
+  int (*SetDigitalDirections)(struct DigitalIODev *impl, unsigned int dirs);
+  int (*GetDigitalStates)(struct DigitalIODev *impl, unsigned int *states);
+  int (*SetDigitalStates)(struct DigitalIODev *impl, unsigned int states);
 };
 
 struct DigitalIODev {
-	void *priv;
-	struct DigitalIODevOps *ops;
+  void *priv;
+  struct DigitalIODevOps *ops;
 };
 
 struct DigitalIO {
-	struct IOBoard		*dev;
-	struct DigitalIODev	*impl;
+  struct IOBoard    *dev;
+  struct DigitalIODev  *impl;
 };
 
 struct DigitalIO *DigitalIO_New(struct IOBoard *dev);

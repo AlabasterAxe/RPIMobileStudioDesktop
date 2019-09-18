@@ -12,10 +12,10 @@
 #include "DigitalIO.h"
 
 struct Features {
-	struct AnalogStreamDevOps *analogStreamDevOps;
-	struct FuncGenDevOps *funcGenDevOps;
-	struct DigitalStreamDevOps *digitalStreamDevOps;
-	struct DigitalIODevOps *digitalIODevOps;
+  struct AnalogStreamDevOps *analogStreamDevOps;
+  struct FuncGenDevOps *funcGenDevOps;
+  struct DigitalStreamDevOps *digitalStreamDevOps;
+  struct DigitalIODevOps *digitalIODevOps;
 };
 
 #endif /* _RPIMS_FEATURES_H */

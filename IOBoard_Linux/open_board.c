@@ -15,73 +15,73 @@ MgErr CINRun(int32 *arg1);
 
 MgErr CINRun(int32 *arg1)
 {
-	int err = 0;
-	struct IOBoard *iob = NULL;
-	struct AnalogStream *as = NULL;
-	unsigned int samplesize, channels;
-	int idx;
+  int err = 0;
+  struct IOBoard *iob = NULL;
+  struct AnalogStream *as = NULL;
+  unsigned int samplesize, channels;
+  int idx;
 
-	*arg1 = 1333;
+  *arg1 = 1333;
 
-	RPIMS_Init();
+  RPIMS_Init();
 
-	iob = IOBoard_Probe(-1);
-	if (!iob) {
-		fprintf(stderr, "No IOBoard device found\n");
-		goto exit;
-	}
+  iob = IOBoard_Probe(-1);
+  if (!iob) {
+    fprintf(stderr, "No IOBoard device found\n");
+    goto exit;
+  }
 
-	as = AnalogStream_New(iob);
-	if (!as) {
-		fprintf(stderr, "Failde to create AnalogStream object\n");
-		goto exit;
-	}
+  as = AnalogStream_New(iob);
+  if (!as) {
+    fprintf(stderr, "Failde to create AnalogStream object\n");
+    goto exit;
+  }
 
-	samplesize = 4096;
-	channels = 1;
+  samplesize = 4096;
+  channels = 1;
 /*
-	err = AnalogStream_Start(as);
-	if (err < 0) {
-		fprintf(stderr, "Failed to start analog stream\n");
-		goto exit;
-	}
+  err = AnalogStream_Start(as);
+  if (err < 0) {
+    fprintf(stderr, "Failed to start analog stream\n");
+    goto exit;
+  }
 
 
 
-	err = AnalogStream_GetSamples(as, samples, &samplesize, &channels);
-	if (err < 0) {
-		fprintf(stderr, "Failed to get samples\n");
-		goto exit;
-	}
+  err = AnalogStream_GetSamples(as, samples, &samplesize, &channels);
+  if (err < 0) {
+    fprintf(stderr, "Failed to get samples\n");
+    goto exit;
+  }
 
-	for (idx = 0; idx < 16; idx++) {
-		fprintf(stdout, "%04x ", samples[idx]);
-	}
-	fprintf(stdout, "\n");
-
-
-
-	err = AnalogStream_GetData(as, data, &samplesize, &channels);
-	if (err < 0) {
-		fprintf(stderr, "Failed to get data\n");
-		goto exit;
-	}
-
-	for (idx = 0; idx < 16; idx++) {
-		fprintf(stdout, "%.4f ", data[idx]);
-	}
-	fprintf(stdout, "\n");
+  for (idx = 0; idx < 16; idx++) {
+    fprintf(stdout, "%04x ", samples[idx]);
+  }
+  fprintf(stdout, "\n");
 
 
-	err = AnalogStream_Stop(as);
-	if (err < 0) {
-		fprintf(stderr, "Failed to stop analog stream\n");
-		goto exit;
-	}
 
-	AnalogStream_Destroy(as);
-	IOBoard_Close(iob);*/
+  err = AnalogStream_GetData(as, data, &samplesize, &channels);
+  if (err < 0) {
+    fprintf(stderr, "Failed to get data\n");
+    goto exit;
+  }
+
+  for (idx = 0; idx < 16; idx++) {
+    fprintf(stdout, "%.4f ", data[idx]);
+  }
+  fprintf(stdout, "\n");
+
+
+  err = AnalogStream_Stop(as);
+  if (err < 0) {
+    fprintf(stderr, "Failed to stop analog stream\n");
+    goto exit;
+  }
+
+  AnalogStream_Destroy(as);
+  IOBoard_Close(iob);*/
 
  exit:
-	return err;
+  return err;
 }

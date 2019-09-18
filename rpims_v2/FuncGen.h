@@ -14,45 +14,45 @@
 
 
 typedef enum {
-	FUNC_GEN_WAVEFORM_OFF = 0,
-	FUNC_GEN_WAVEFORM_SINE = 1,
-	FUNC_GEN_WAVEFORM_SQUARE = 2,
-	FUNC_GEN_WAVEFORM_TRIANGLE = 3
+  FUNC_GEN_WAVEFORM_OFF = 0,
+  FUNC_GEN_WAVEFORM_SINE = 1,
+  FUNC_GEN_WAVEFORM_SQUARE = 2,
+  FUNC_GEN_WAVEFORM_TRIANGLE = 3
 } FuncGenWaveform;
 
 struct FuncGenDev;
 
 struct FuncGenDevOps {
-	int (*Init)(struct FuncGenDev *impl);
-	int (*Cleanup)(struct FuncGenDev *impl);
-	int (*SetOpenedDevice)(struct FuncGenDev *impl, struct IOBoard *dev);
-	int (*Start)(struct FuncGenDev *impl, int genIndex);
-	int (*Stop)(struct FuncGenDev *impl, int genIndex);
-	int (*SetFrequency)(struct FuncGenDev *fg, int genIndex, double value);
-	int (*SetPhase)(struct FuncGenDev *fg, int genIndex, double value);
-	int (*SetWaveform)(struct FuncGenDev *fg, int genIndex, FuncGenWaveform value);
-	int (*SetOffset)(struct FuncGenDev *fg, int genIndex, double value);
-	int (*SetPkPk)(struct FuncGenDev *fg, int genIndex, double value);
+  int (*Init)(struct FuncGenDev *impl);
+  int (*Cleanup)(struct FuncGenDev *impl);
+  int (*SetOpenedDevice)(struct FuncGenDev *impl, struct IOBoard *dev);
+  int (*Start)(struct FuncGenDev *impl, int genIndex);
+  int (*Stop)(struct FuncGenDev *impl, int genIndex);
+  int (*SetFrequency)(struct FuncGenDev *fg, int genIndex, double value);
+  int (*SetPhase)(struct FuncGenDev *fg, int genIndex, double value);
+  int (*SetWaveform)(struct FuncGenDev *fg, int genIndex, FuncGenWaveform value);
+  int (*SetOffset)(struct FuncGenDev *fg, int genIndex, double value);
+  int (*SetPkPk)(struct FuncGenDev *fg, int genIndex, double value);
 };
 
 struct FuncGenChannel {
-	double frequency;
-	double phase;
-	FuncGenWaveform waveform;
-	double offset;
-	double pkPk;
+  double frequency;
+  double phase;
+  FuncGenWaveform waveform;
+  double offset;
+  double pkPk;
 };
 
 struct FuncGenDev {
-	struct FuncGenDevOps *ops;
-	void *priv;
+  struct FuncGenDevOps *ops;
+  void *priv;
 
-	struct FuncGenChannel channels[4];
+  struct FuncGenChannel channels[4];
 };
 
 struct FuncGen {
-	struct IOBoard		*dev;
-	struct FuncGenDev	*impl;
+  struct IOBoard    *dev;
+  struct FuncGenDev  *impl;
 };
 
 struct FuncGen *FuncGen_New(struct IOBoard *dev);
