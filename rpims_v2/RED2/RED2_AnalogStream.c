@@ -9,6 +9,8 @@
 #include "IOBoard.h"
 #include "AnalogStream.h"
 
+#include <stdio.h>
+
 
 #define SAMPLES_MAX 262144
 #define MAX_ADC_VOLTAGE 3.3
@@ -80,11 +82,6 @@ RED2_AnalogStream_SetOpenedDevice(struct AnalogStreamDev *impl, struct IOBoard *
 	priv->dev = dev;
 	return 0;
 }
-
-
-
-
-
 
 int
 RED2_AnalogStream_SetTriggerLevel_SET(struct AnalogStreamDev *impl)
@@ -441,8 +438,9 @@ RED2_AnalogStream_GetSamples(struct AnalogStreamDev *impl,
 	int start;
 	int status;
 
-	if (count > SAMPLES_MAX)
+	if (count > SAMPLES_MAX) {
 		return -ERANGE;
+	}
 
 	nch = !!(channels & STREAM_CHANNEL_A) + !!(channels & STREAM_CHANNEL_B);
 	if (nch == 2)
@@ -468,13 +466,13 @@ RED2_AnalogStream_GetSamples(struct AnalogStreamDev *impl,
 
 
 	rc = IOBoard_USBBulkWrite(dev, 0x02, (char *) tx_buf, 8, 1);
-	//fprintf(stdout, "Write: %d\n", rc);
+	fprintf(stdout, "Write: %d\n", rc);
 
 	idx = 0;
 	while (bytes_read < size) {
 
 		rc = IOBoard_USBBulkRead(dev, 0x01, (char *) rx_buf, 512, 60000);
-		//fprintf(stdout, "Read: %d\n", rc);
+		fprintf(stdout, "Read: %d\n", rc);
 
 		if (rc == 0)
 			continue;

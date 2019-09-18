@@ -66,12 +66,14 @@ IOBoard_USBOps_Close_libusb(struct IOBoard *iob) {
 	priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
 
 	err = libusb_release_interface(priv->hnd, 0);
-	if (err < 0)
+	if (err < 0) {
 		return err;
+	}
 
 	libusb_close(priv->hnd);
-	if (err < 0)
+	if (err < 0) {
 		return err;
+	}
 
 	return 0;
 }
@@ -79,38 +81,68 @@ IOBoard_USBOps_Close_libusb(struct IOBoard *iob) {
 static int
 IOBoard_USBOps_ControlMsg_libusb(struct IOBoard *iob, int type, int req, int value,
 				 int index, char *data, int size, int timeout) {
-	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	// return usb_control_msg(priv->hnd, type, req, value,
-			    //    index, data, size, timeout);
-				return 0;
+	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	return libusb_control_transfer(
+		priv->hnd,
+		type & 0xff,
+		req & 0xff,
+		value & 0xffff,
+		index & 0xffff,
+		data,
+		size & 0xffff,
+		timeout);
 }
 
 static int
 IOBoard_USBOps_BulkRead_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
-	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	// return usb_bulk_read(priv->hnd, endpoint, data, len, timeout);
-	return 0;
+	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	endpoint |= USB_ENDPOINT_IN;
+	int actual_length;
+	int rc = libusb_bulk_transfer(priv->hnd, endpoint & 0xff, data, len, &actual_length, timeout);
+	if (rc != 0) {
+		return rc;
+	}
+	return actual_length;
 }
 
 static int
 IOBoard_USBOps_BulkWrite_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
-	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	// return usb_bulk_write(priv->hnd, endpoint, data, len, timeout);
-	return 0;
+	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	if (endpoint & USB_ENDPOINT_IN) {
+		endpoint &= ~USB_ENDPOINT_IN;
+	}
+	int actual_length;
+	int rc = libusb_bulk_transfer(priv->hnd, endpoint & 0xff, data, len, &actual_length, timeout);
+	if (rc != 0) {
+		return rc;
+	}
+	return actual_length;
 }
 
 static int
 IOBoard_USBOps_InterruptRead_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
-	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	// return usb_interrupt_read(priv->hnd, endpoint, data, len, timeout);
-	return 0;
+	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	endpoint |= USB_ENDPOINT_IN;
+	int actual_length;
+	int rc = libusb_interrupt_transfer(priv->hnd, endpoint & 0xff, data, len, &actual_length, timeout);
+	if (rc != 0) {
+		return rc;
+	}
+	return actual_length;
 }
 
 static int
 IOBoard_USBOps_InterruptWrite_libusb(struct IOBoard *iob, int endpoint, char *data, int len, int timeout) {
-	// struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
-	// return usb_interrupt_write(priv->hnd, endpoint, data, len, timeout);
-	return 0;
+	struct IOBoardUSBPriv_libusb *priv = (struct IOBoardUSBPriv_libusb *) iob->usbpriv;
+	if (endpoint & USB_ENDPOINT_IN) {
+		endpoint &= ~USB_ENDPOINT_IN;
+	}
+	int actual_length;
+	int rc = libusb_interrupt_transfer(priv->hnd, endpoint & 0xff, data, len, &actual_length, timeout);
+	if (rc != 0) {
+		return rc;
+	}
+	return actual_length;
 }
 
 static int
