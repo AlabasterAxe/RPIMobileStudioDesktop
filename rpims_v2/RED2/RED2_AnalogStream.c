@@ -489,8 +489,9 @@ RED2_AnalogStream_GetSamples(struct AnalogStreamDev *impl,
 		}
 
 		for (i = start; i < 512; i += 4) {
-			if (idx >= count)
+			if (idx >= count) {
 				break;
+			}
 
 			/* Channel A */
 			if (channels & STREAM_CHANNEL_A) {
@@ -500,8 +501,9 @@ RED2_AnalogStream_GetSamples(struct AnalogStreamDev *impl,
 				idx++;
 			}
 
-			if (idx >= count)
+			if (idx >= count) {
 				break;
+			}
 
 			/* Channel B */
 			if (channels & STREAM_CHANNEL_B) {

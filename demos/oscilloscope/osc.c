@@ -93,13 +93,9 @@ void * retrieval_thread(void *arg) {
 
       //pthread_mutex_lock(&mutex);
 
-      err = AnalogStream_GetData(as, samples_a, nsamples, STREAM_CHANNEL_A);
-      if (err < 0) {
-        fprintf(stderr, "Failed to get samples\n");
-        goto exit;
-      }
+      int channels = STREAM_CHANNEL_A | STREAM_CHANNEL_B;
 
-      err = AnalogStream_GetData(as, samples_b, nsamples, STREAM_CHANNEL_b);
+      err = AnalogStream_GetData(as, samples_a, nsamples, STREAM_CHANNEL_A | STREAM_CHANNEL_B);
       if (err < 0) {
         fprintf(stderr, "Failed to get samples\n");
         goto exit;
@@ -172,7 +168,7 @@ void display() {
 
   /* Plot Data */
   if (ch1) {
-    glLineWidth(1.0);
+    glLineWidth(1.5);
     glBegin(GL_LINE_STRIP);
     glColor3f(0.0, 1.0, 0.0);
     for (i = 0; i < nsamples; i++) {
@@ -188,7 +184,7 @@ void display() {
   }
 
   if (ch2) {
-    glLineWidth(1.0);
+    glLineWidth(2.0);
     glBegin(GL_LINE_STRIP);
     glColor3f(0.0, 0.0, 1.0);
     for (i = 0; i < nsamples; i++) {
