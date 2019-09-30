@@ -20,12 +20,7 @@ revision of the I/O board.
 
 ******INSTALL INSTRUCTIONS*******
 
-Required libraries: libtool, automake
-
-From the lib/libusb-0.1.12 directory:
-  ./configure
-  make
-  make install
+Required libraries: libtool, automake, libusb-1.0-0-dev, libusb-dev, freeglut3-dev (for the oscilloscope demo)
 
 From the rpims_v2 directory:
   ./bootstrap.sh
